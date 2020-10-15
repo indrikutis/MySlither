@@ -21,7 +21,7 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 
-final class MySlitherWebSocketClient extends WebSocketClient {
+final class  MySlitherWebSocketClient extends WebSocketClient {
 
     private static final Map<String, String> HEADER = new LinkedHashMap<>();
     private static final byte[] DATA_PING = new byte[]{(byte) 251};

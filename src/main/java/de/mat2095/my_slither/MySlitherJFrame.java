@@ -17,78 +17,57 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 final class MySlitherJFrame extends JFrame {
 
+    private static final String[] COLORS = {
+        "#ED61CA",
+        "#EC4518",
+        "#E6D20A",
+        "#55E60A",
+        "#0AE6AC",
+        "#0A31E6",
+        "#730AE6",
+        "#E60AE3",
+        "#E6860A",
+        "#EDF71D",
+        "#FFFFFF",
+        "#C78EF0",
+        "#F0E88E",
+        "#FF7F50",
+        "#DDA0DD",
+        "#FF00FF",
+        "#4B0082",
+        "#00FF00",
+        "#808000",
+        "#00FFFF"
+    };
+
     private static final String[] SNAKES = {
-        "00 - purple",
-        "01 - blue",
-        "02 - cyan",
-        "03 - green",
-        "04 - yellow",
-        "05 - orange",
-        "06 - salmon",
-        "07 - red",
-        "08 - violet",
-        "09 - flag: USA",
-        "10 - flag: Russia",
-        "11 - flag: Germany",
-        "12 - flag: Italy",
-        "13 - flag: France",
-        "14 - white/red",
-        "15 - rainbow",
-        "16 - blue/yellow",
-        "17 - white/blue",
-        "18 - red/white",
-        "19 - white",
-        "20 - green/purple",
-        "21 - flag: Brazil",
-        "22 - flag: Ireland",
-        "23 - flag: Romania",
-        "24 - cyan/yellow +extra",
-        "25 - purple/orange +extra",
-        "26 - grey/brown",
-        "27 - green with eye",
-        "28 - yellow/green/red",
-        "29 - black/yellow",
-        "30 - stars/EU",
-        "31 - stars",
-        "32 - EU",
-        "33 - yellow/black",
-        "34 - colorful",
-        "35 - red/white/pink",
-        "36 - blue/white/light-blue",
-        "37 - Kwebbelkop",
-        "38 - yellow",
-        "39 - PewDiePie",
-        "40 - green happy",
-        "41 - red with eyes",
-        "42 - Google Play",
-        "43 - UK",
-        "44 - Ghost",
-        "45 - Canada",
-        "46 - Swiss",
-        "47 - Moldova",
-        "48 - Vietnam",
-        "49 - Argentina",
-        "50 - Colombia",
-        "51 - Thailand",
-        "52 - red/yellow",
-        "53 - glowy-blue",
-        "54 - glowy-red",
-        "55 - glowy-yellow",
-        "56 - glowy-orange",
-        "57 - glowy-purple",
-        "58 - glowy-green",
-        "59 - yellow-M",
-        "60 - detailed UK",
-        "61 - glowy-colorful",
-        "62 - purple spiral",
-        "63 - red/black",
-        "64 - blue/black"
+        "Persian Pink",
+        "Pomegranate",
+        "Corn",
+        "Bright Green",
+        "Bright Turquoise",
+        "Blue",
+        "Electric Violet",
+        "Purple Pizzazz",
+        "Tahiti Gold",
+        "Lemon",
+        "White",
+        "Lavender",
+        "Khaki",
+        "Coral",
+        "Plum",
+        "Magenta",
+        "Indigo",
+        "Lime",
+        "Olive",
+        "Aqua"
     };
 
     // TODO: skins, prey-size, snake-length/width, bot-layer, that-other-thing(?), show ping
 
     private final JTextField server, name;
     private final JComboBox<String> snake;
+    private final JComboBox<String> snakeHead;
     private final JCheckBox useRandomServer;
     private final JToggleButton connect;
     private final JLabel rank, kills;
@@ -106,6 +85,10 @@ final class MySlitherJFrame extends JFrame {
     private final Player player;
     MySlitherModel model;
     final Object modelLock = new Object();
+
+    public static String skinBody;
+    public static String skinHead;
+
 
     MySlitherJFrame() {
         super("MySlither");
@@ -139,7 +122,10 @@ final class MySlitherJFrame extends JFrame {
         name = new JTextField("MySlitherEaterBot", 16);
 
         snake = new JComboBox<>(SNAKES);
+        snakeHead = new JComboBox<>(SNAKES);
+
         snake.setMaximumRowCount(snake.getItemCount());
+        snakeHead.setMaximumRowCount(snakeHead.getItemCount());
 
         useRandomServer = new JCheckBox("use random server", true);
         useRandomServer.addActionListener(a -> {
@@ -188,14 +174,18 @@ final class MySlitherJFrame extends JFrame {
             new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(name,
             new GridBagConstraints(1, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
-        settings.add(new JLabel("skin:"),
+        settings.add(new JLabel("skin (body):"),
             new GridBagConstraints(0, 2, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(snake,
             new GridBagConstraints(1, 2, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(new JLabel("skin (head):"),
+            new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(snakeHead,
+            new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(useRandomServer,
             new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(connect,
-            new GridBagConstraints(2, 1, 1, 2, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+            new GridBagConstraints(2, 1, 1, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(new JSeparator(SwingConstants.VERTICAL),
             new GridBagConstraints(3, 0, 1, 3, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 6, 0, 6), 0, 0));
         settings.add(new JLabel("kills:"),
@@ -321,6 +311,10 @@ final class MySlitherJFrame extends JFrame {
     }
 
     private void connect() {
+
+        skinBody = COLORS[snake.getSelectedIndex()].toString();
+        skinHead = COLORS[snakeHead.getSelectedIndex()].toString();
+
         new Thread(() -> {
             if (status != Status.DISCONNECTED) {
                 throw new IllegalStateException("Connecting while not disconnected");
@@ -388,6 +382,8 @@ final class MySlitherJFrame extends JFrame {
         useRandomServer.setEnabled(status.allowModifyData);
         name.setEnabled(status.allowModifyData);
         snake.setEnabled(status.allowModifyData);
+        snakeHead.setEnabled(status.allowModifyData);
+
     }
 
     void log(String text) {
@@ -447,4 +443,5 @@ final class MySlitherJFrame extends JFrame {
             this.allowModifyData = allowModifyData;
         }
     }
+
 }
