@@ -20,7 +20,7 @@ final class MySlitherCanvas extends JPanel {
 
     private static final Color BACKGROUND_COLOR = new Color(0x2B2B2B);
     private static final Color FOREGROUND_COLOR = new Color(0xA9B7C6);
-    private static final Color SECTOR_COLOR = new Color(0x803C3F41, true);
+    private static final Color SECTOR_COLOR = new Color(0x80720B35, true);
     private static final Color FOOD_COLOR = new Color(0xCC7832);
     private static final Color PREY_COLOR = new Color(0xFFFF00);
     private static final float[] PREY_HALO_FRACTIONS = new float[]{0.5f, 1f};
@@ -31,13 +31,15 @@ final class MySlitherCanvas extends JPanel {
     private static final Color[] OWN_SNAKE_HALO_COLORS = new Color[]{new Color(0x6039AFFF, true), new Color(0x0039AFFF, true)};
     private static final Color SNAKE_BODY_COLOR = new Color(0x6A8759);
     private static final Color MAP_COLOR = new Color(0xA0A9B7C6, true);
-    private static final Color MAP_POSITION_COLOR = new Color(0xE09E2927, true);
+    private static final Color MAP_POSITION_COLOR = new Color(0xE05E6D7F, true);
     private static final Color NAME_SHADOW_COLOR = new Color(0xC02B2B2B, true);
     private static final Font NAME_FONT = Font.decode("SansSerif-BOLD");
     private static final Font DEBUG_FONT = Font.decode("SansSerif-PLAIN-12");
 
     private static Color OWN_SNAKE_BODY_COLOR;
     private static Color OWN_SNAKE_COLOR;
+
+    private static Color CUSTOM_BACKGROUND;
 
     private boolean[] map;
     private final MySlitherJFrame view;
@@ -165,7 +167,8 @@ final class MySlitherCanvas extends JPanel {
                 g.translate(-model.snake.x, -model.snake.y);
             }
 
-            g.setColor(SECTOR_COLOR);
+            CUSTOM_BACKGROUND = Color.decode(MySlitherJFrame.background);
+            g.setColor(CUSTOM_BACKGROUND);
             for (int y = 0; y < model.sectors.length; y++) {
                 for (int x = 0; x < model.sectors[y].length; x++) {
                     if (model.sectors[y][x]) {

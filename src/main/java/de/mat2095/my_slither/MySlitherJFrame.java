@@ -63,6 +63,32 @@ final class MySlitherJFrame extends JFrame {
         "Aqua"
     };
 
+    private static final String[] BG_COL = {
+        "#4f4f57",
+        "#c28dbe",
+        "#a88dc2",
+        "#7bb09a",
+        "#b0a56f",
+        "#e8fafa",
+        "#27808c",
+        "#c90828",
+        "#172d5c",
+        "#464775"
+    };
+
+    private static final String[] COL_NAME = {
+        "Just gray",
+        "Nice pink",
+        "Almost lavender",
+        "Seaweed",
+        "Dry desert",
+        "Snow blue",
+        "SCC building",
+        "R",
+        "Night sky",
+        "Microsoft Teams"
+    };
+
     // TODO: skins, prey-size, snake-length/width, bot-layer, that-other-thing(?), show ping
 
     private final JTextField server, name;
@@ -89,6 +115,8 @@ final class MySlitherJFrame extends JFrame {
     public static String skinBody;
     public static String skinHead;
 
+    public static String background;
+    private final JComboBox<String> chooseBackground;
 
     MySlitherJFrame() {
         super("MySlither");
@@ -126,6 +154,9 @@ final class MySlitherJFrame extends JFrame {
 
         snake.setMaximumRowCount(snake.getItemCount());
         snakeHead.setMaximumRowCount(snakeHead.getItemCount());
+
+        chooseBackground = new JComboBox<>(COL_NAME);
+        chooseBackground.setMaximumRowCount(chooseBackground.getItemCount());
 
         useRandomServer = new JCheckBox("use random server", true);
         useRandomServer.addActionListener(a -> {
@@ -182,6 +213,10 @@ final class MySlitherJFrame extends JFrame {
             new GridBagConstraints(0, 3, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(snakeHead,
             new GridBagConstraints(1, 3, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(new JLabel("background:"),
+            new GridBagConstraints(0, 4, 1, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
+        settings.add(chooseBackground,
+            new GridBagConstraints(1, 4, 1, 1, 0, 0,GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(useRandomServer,
             new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
         settings.add(connect,
@@ -315,6 +350,8 @@ final class MySlitherJFrame extends JFrame {
         skinBody = COLORS[snake.getSelectedIndex()].toString();
         skinHead = COLORS[snakeHead.getSelectedIndex()].toString();
 
+        background = BG_COL[chooseBackground.getSelectedIndex()].toString();
+
         new Thread(() -> {
             if (status != Status.DISCONNECTED) {
                 throw new IllegalStateException("Connecting while not disconnected");
@@ -384,6 +421,7 @@ final class MySlitherJFrame extends JFrame {
         snake.setEnabled(status.allowModifyData);
         snakeHead.setEnabled(status.allowModifyData);
 
+        chooseBackground.setEnabled(status.allowModifyData);
     }
 
     void log(String text) {
