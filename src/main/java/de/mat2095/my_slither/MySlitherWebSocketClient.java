@@ -21,7 +21,7 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 
-final class  MySlitherWebSocketClient extends WebSocketClient {
+final class MySlitherWebSocketClient extends WebSocketClient {
 
     private static final Map<String, String> HEADER = new LinkedHashMap<>();
     private static final byte[] DATA_PING = new byte[]{(byte) 251};
@@ -585,11 +585,22 @@ final class  MySlitherWebSocketClient extends WebSocketClient {
             view.log("add food wrong length!");
             return;
         }
+
+        int counter = 0;
+        int rnd = 0;
+
         for (int i = 8; i < data.length; i += 6) {
             int x = (data[i - 4] << 8) | data[i - 3];
             int z = (data[i - 2] << 8) | data[i - 1];
             double radius = data[i] / 5.0;
-            model.addFood(x, z, radius, fastSpawn); // TODO: now always...
+            model.addFood(x, z, radius, fastSpawn, false); // TODO: now always...
+
+            if (counter == 6) {
+                rnd = (int)(Math.random() * 101);
+                model.addBFood(x + rnd, z + rnd, radius, fastSpawn, true);
+                counter %= 6;
+            }
+            counter ++;
         }
     }
 
@@ -601,6 +612,12 @@ final class  MySlitherWebSocketClient extends WebSocketClient {
 
         int x = (data[3] << 8) | data[4];
         int y = (data[5] << 8) | data[6];
+
+        /*model.foods.values().forEach(food -> {
+            if ((food.getX() == x) && (food.getY() == y) && (food.getBFood() == true)) {
+                model.removeSnake((data[3] << 8) | data[4]);
+            }
+        });*/
 
         model.removeFood(x, y);
     }
