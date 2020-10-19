@@ -7,11 +7,13 @@ class Food {
     private final double size;
     private final double rsp;
     private final long spawnTime;
+    private final boolean bFood;
 
-    Food(int x, int y, double size, boolean fastSpawn) {
+    Food(int x, int y, double size, boolean fastSpawn, boolean bFood) {
         this.x = x;
         this.y = y;
         this.size = size;
+        this.bFood = bFood;
         this.rsp = fastSpawn ? 4 : 1;
         spawnTime = System.currentTimeMillis();
     }
@@ -28,4 +30,12 @@ class Food {
             return (1 - Math.cos(Math.PI * fillRate)) / 2 * size;
         }
     }
+
+     boolean getBFood() {
+        return bFood;
+    }
+
+    int getX() { return x; };
+
+    int getY() { return y; };
 }
